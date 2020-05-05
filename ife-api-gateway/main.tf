@@ -23,7 +23,7 @@ resource "aws_api_gateway_authorizer" "custom_lambda_authorizer" {
   rest_api_id   = aws_api_gateway_rest_api.ife_rest_api.id
   provider_arns = [var.cognito_user_pool_arn]
 
-  authorizer_result_ttl_in_seconds = 60
+  authorizer_result_ttl_in_seconds = 0
 
   authorizer_uri         = var.authorization_lambda_invoke_arn
   authorizer_credentials = aws_iam_role.ife_api_gateway_invocation_role.arn

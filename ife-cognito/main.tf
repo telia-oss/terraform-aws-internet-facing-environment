@@ -13,8 +13,45 @@ resource "aws_cognito_user_pool" "ife_user_pool" {
 }
 
 resource "aws_cognito_user_pool_domain" "ife_generated_domain" {
+  count        = var.use_own_domain == false ? 1 : 0
   domain       = var.custom_sub_domain
   user_pool_id = aws_cognito_user_pool.ife_user_pool.id
+}
+
+data "aws_route53_zone" "this" {
+  count = var.use_own_domain == true ? 1 : 0
+
+  name = "${var.zone_domain_name}."
+}
+
+// Small hack as cognito own domain requires existence of A root record
+resource "aws_route53_record" "record_root" {
+  count = var.use_own_domain == true ? 1 : 0
+
+  name    = var.own_domain
+  zone_id = data.aws_route53_zone.this[count.index].zone_id
+  type    = "A"
+  ttl     = "300"
+  records = ["127.0.0.1"]
+}
+
+resource "aws_cognito_user_pool_domain" "ife_own_domain" {
+  count        = var.use_own_domain == true ? 1 : 0
+  certificate_arn = var.certificate_arn
+  domain       = "${var.custom_sub_domain}.${var.own_domain}"
+  user_pool_id = aws_cognito_user_pool.ife_user_pool.id
+
+  depends_on = [aws_route53_record.record_root]
+}
+
+resource "aws_route53_record" "record_ife" {
+  count = var.use_own_domain == true ? 1 : 0
+
+  name    = "${var.custom_sub_domain}.${var.own_domain}"
+  zone_id = data.aws_route53_zone.this[count.index].zone_id
+  type    = "CNAME"
+  ttl     = "300"
+  records = [aws_cognito_user_pool_domain.ife_own_domain[count.index].cloudfront_distribution_arn]
 }
 
 resource "aws_cognito_resource_server" "ife_resource_server" {

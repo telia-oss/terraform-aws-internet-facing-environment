@@ -43,7 +43,7 @@ variable "api_gw_log_retetion" {
 }
 
 variable "create_custom_domain" {
-  description = "Boolean if custome domain name should be created. Currently only AWS ACM supported"
+  description = "Boolean if custom domain name should be created. Currently only AWS ACM supported"
   type        = bool
   default     = false
 }

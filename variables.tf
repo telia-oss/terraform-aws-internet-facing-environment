@@ -46,6 +46,23 @@ variable cognito_sub_domain {
   default     = ""
 }
 
+variable "cognito_use_own_domain" {
+  description = "True if own domain should be used"
+  type = bool
+  default = false
+}
+
+variable "cognito_own_domain_certificate_arn" {
+  description = "Own domain certificate ARN"
+  type = string
+  default = ""
+}
+
+variable "cognito_own_domain" {
+  description = "Own domain value"
+  type = string
+  default = ""
+}
 
 #API GATEWAY
 variable "api_version" {
