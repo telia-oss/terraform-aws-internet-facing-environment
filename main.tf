@@ -15,11 +15,11 @@ locals {
   }
 
   #COGNITO
-  pool_name          = var.pool_name
-  cognito_sub_domain = var.cognito_sub_domain
-  cognito_use_own_domain = var.cognito_use_own_domain
+  pool_name                          = var.pool_name
+  cognito_sub_domain                 = var.cognito_sub_domain
+  cognito_use_own_domain             = var.cognito_use_own_domain
   cognito_own_domain_certificate_arn = var.cognito_own_domain_certificate_arn
-  cognito_own_domain = var.cognito_own_domain
+  cognito_own_domain                 = var.cognito_own_domain
 
   #API GATEWAY
   api_version = var.api_version
@@ -43,10 +43,10 @@ module "ife_cognito" {
   ife_configuration = local.ife_configuration
 
   custom_sub_domain = local.cognito_sub_domain
-  use_own_domain = local.cognito_use_own_domain
-  certificate_arn = local.cognito_own_domain_certificate_arn
-  own_domain = local.cognito_own_domain
-  zone_domain_name = local.certificate_domain
+  use_own_domain    = local.cognito_use_own_domain
+  certificate_arn   = local.cognito_own_domain_certificate_arn
+  own_domain        = local.cognito_own_domain
+  zone_domain_name  = local.certificate_domain
 
   tags = local.tags
 }

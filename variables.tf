@@ -5,7 +5,7 @@
 ### GLOBAL CONFIG ###
 // Use json decode to load configuration file jsondecode(file("${path.module}/ife-configuration-example.json"))
 variable "ife_configuration" {
-  description = "Configuration file as JSON. Example file: ife-configuration.json"
+  description = "Configuration file as JSON. Example file: ife-configuration-example.json"
   default     = ""
 }
 
@@ -41,27 +41,26 @@ variable "pool_name" {
 }
 
 variable cognito_sub_domain {
-  description = "Cognito sub domain where clients will requests tokens"
+  description = "Cognito sub domain where clients will requests tokens. Its mandatory even if own domain is not used."
   type        = string
-  default     = ""
 }
 
 variable "cognito_use_own_domain" {
   description = "True if own domain should be used"
-  type = bool
-  default = false
+  type        = bool
+  default     = false
 }
 
 variable "cognito_own_domain_certificate_arn" {
-  description = "Own domain certificate ARN"
-  type = string
-  default = ""
+  description = "Own domain certificate ARN. This certificate has to be managed by ACM in us-east-1"
+  type        = string
+  default     = ""
 }
 
 variable "cognito_own_domain" {
   description = "Own domain value"
-  type = string
-  default = ""
+  type        = string
+  default     = ""
 }
 
 #API GATEWAY
@@ -90,7 +89,7 @@ variable "nlb_arn" {
 }
 
 variable "create_api_custom_domain" {
-  description = "True if own domain should be used. A"
+  description = "True if own domain should be used"
   type        = bool
   default     = false
 }

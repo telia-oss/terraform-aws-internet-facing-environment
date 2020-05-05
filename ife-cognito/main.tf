@@ -36,10 +36,10 @@ resource "aws_route53_record" "record_root" {
 }
 
 resource "aws_cognito_user_pool_domain" "ife_own_domain" {
-  count        = var.use_own_domain == true ? 1 : 0
+  count           = var.use_own_domain == true ? 1 : 0
   certificate_arn = var.certificate_arn
-  domain       = "${var.custom_sub_domain}.${var.own_domain}"
-  user_pool_id = aws_cognito_user_pool.ife_user_pool.id
+  domain          = "${var.custom_sub_domain}.${var.own_domain}"
+  user_pool_id    = aws_cognito_user_pool.ife_user_pool.id
 
   depends_on = [aws_route53_record.record_root]
 }

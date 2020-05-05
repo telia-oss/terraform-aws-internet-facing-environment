@@ -108,6 +108,69 @@ module "ife" {
 # IFE module technical details
 Provider requirements:
 * **aws:** (any version) 
+
+### Input variables
+#### General config
+`ife_configuration`
+Configuration file as JSON. Example file: ife-configuration-example.json
+
+`region`
+AWS region where IFE will be applied
+
+`environment`
+Environment name. Is used as a tag and API GW stage config
+
+`name`
+Custom name for IFE. Is used to tag resources
+
+`project`
+Custom project for IFE. Is used to tag resources
+
+#### Cognito config
+`pool_name`
+Cognito pool name
+
+`cognito_sub_domain`
+Cognito sub domain where clients will requests tokens. Its mandatory even if own domain is not used.
+
+`cognito_use_own_domain`
+True if own domain should be used
+
+`cognito_own_domain_certificate_arn`
+Own domain certificate ARN. This certificate has to be managed by ACM in us-east-1
+
+`cognito_own_domain`
+Own domain value
+
+#### API GATEWAY config
+`api_version`
+Version of API where deployment is triggered by changing this version
+
+`root_path`
+Beginning path in URL after domain
+
+`api_gw_log_retetion`
+API gateway cloud watch logs retention in days
+
+`nlb_arn`
+Private network load balancer arn which is needed for API GW VPC link setup
+
+`create_api_custom_domain`
+True if own domain should be used
+
+`certificate_domain`
+Certificate domain where certificated in ACM is issued for. Use only if create_api_custom_domain = true
+
+`api_sub_domain`
+API GW sub domain of certificate_domain. Use only if create_api_custom_domain = true
+
+#### Lambda config
+`lambda_log_retention`
+Lambda cloud watch log retention in days
+
+### Output variables
+`tags`
+Resource tags
  
 # Sub modules
 ## ife-api-gateway
@@ -166,6 +229,18 @@ IFE cognito pool name
 
 `custom_sub_domain`
 Sub-domain to be used with Cognito. Domain prefix is mandatory
+
+`use_own_domain`
+Set to true if own domain should be used
+
+`own_domain`
+Own domain name value if own domain shall be used
+
+`zone_domain_name`
+Route 53 hosted zone domain. Can be same as own domain
+
+`certificate_arn`
+Certificate issued for `own_domain`
 
 `tags`
 A map of tags to add to all resources
