@@ -10,15 +10,13 @@ variable "ife_configuration" {
 }
 
 variable "region" {
-  description = "AWS region where IFE will be applied"
+  description = "AWS region where IFE will be applied and mandatory env variable for authorization lambda"
   type        = string
-  default     = ""
 }
 
 variable "environment" {
   description = "Environment name. Is used as a tag and API GW stage config"
   type        = string
-  default     = ""
 }
 
 variable "name" {
@@ -37,11 +35,10 @@ variable "project" {
 variable "pool_name" {
   description = "Cognito pool name"
   type        = string
-  default     = ""
 }
 
 variable cognito_sub_domain {
-  description = "Cognito sub domain where clients will requests tokens. Its mandatory even if own domain is not used."
+  description = "Cognito sub domain where clients will request tokens. Its mandatory even if own domain is not used."
   type        = string
 }
 
@@ -52,7 +49,7 @@ variable "cognito_use_own_domain" {
 }
 
 variable "cognito_own_domain_certificate_arn" {
-  description = "Own domain certificate ARN. This certificate has to be managed by ACM in us-east-1"
+  description = "Own domain certificate ARN. This certificate must be managed by ACM in us-east-1"
   type        = string
   default     = ""
 }
@@ -71,12 +68,12 @@ variable "api_version" {
 }
 
 variable "root_path" {
-  description = "Beginning path in URL after domain"
+  description = "Beginning path in URL following domain"
   type        = string
   default     = ""
 }
 
-variable "api_gw_log_retetion" {
+variable "api_gw_log_retention" {
   description = "API gateway cloud watch logs retention in days"
   type        = number
   default     = 7
@@ -85,7 +82,6 @@ variable "api_gw_log_retetion" {
 variable "nlb_arn" {
   description = "Private network load balancer arn which is needed for API GW VPC link setup"
   type        = string
-  default     = ""
 }
 
 variable "create_api_custom_domain" {

@@ -26,7 +26,7 @@ locals {
   root_path   = var.root_path
   nlb_arn     = var.nlb_arn
 
-  api_gw_log_retention = var.api_gw_log_retetion
+  api_gw_log_retention = var.api_gw_log_retention
 
   create_api_custom_domain = var.create_api_custom_domain
   certificate_domain       = var.certificate_domain

@@ -110,63 +110,29 @@ Provider requirements:
 * **aws:** (any version) 
 
 ### Input variables
-#### General config
-`ife_configuration`
-Configuration file as JSON. Example file: ife-configuration-example.json
-
-`region`
-AWS region where IFE will be applied
-
-`environment`
-Environment name. Is used as a tag and API GW stage config
-
-`name`
-Custom name for IFE. Is used to tag resources
-
-`project`
-Custom project for IFE. Is used to tag resources
-
-#### Cognito config
-`pool_name`
-Cognito pool name
-
-`cognito_sub_domain`
-Cognito sub domain where clients will requests tokens. Its mandatory even if own domain is not used.
-
-`cognito_use_own_domain`
-True if own domain should be used
-
-`cognito_own_domain_certificate_arn`
-Own domain certificate ARN. This certificate has to be managed by ACM in us-east-1
-
-`cognito_own_domain`
-Own domain value
-
-#### API GATEWAY config
-`api_version`
-Version of API where deployment is triggered by changing this version
-
-`root_path`
-Beginning path in URL after domain
-
-`api_gw_log_retetion`
-API gateway cloud watch logs retention in days
-
-`nlb_arn`
-Private network load balancer arn which is needed for API GW VPC link setup
-
-`create_api_custom_domain`
-True if own domain should be used
-
-`certificate_domain`
-Certificate domain where certificated in ACM is issued for. Use only if create_api_custom_domain = true
-
-`api_sub_domain`
-API GW sub domain of certificate_domain. Use only if create_api_custom_domain = true
-
-#### Lambda config
-`lambda_log_retention`
-Lambda cloud watch log retention in days
+|Name|Description|Type|Default|Required|
+|---|---|---|---|---|
+| _General config_  | - | - | - | - |
+| ife_configuration | Configuration file as JSON. Example file: ife-configuration-example.json | json | | yes |
+| region|AWS region where IFE will be applied and mandatory env variable for authorization lambda | string | | yes |
+| environment | Environment name. Is used as a tag and API GW stage config | string | | yes |
+| name | Custom name for IFE. Is used to tag resources | string | "" | no |
+| project | Custom project for IFE. Is used to tag resources | string | "" | no | 
+| _Cognito config_  | - | - | - | - |
+| pool_name | Cognito pool name | string | | yes | 
+| cognito_sub_domain | Cognito sub domain where clients will request tokens. Its mandatory even if own domain is not used | string | | yes | 
+| cognito_use_own_domain | True if own domain should be used | bool | false | no | 
+| cognito_own_domain_certificate_arn | Own domain certificate ARN. This certificate must be managed by ACM in us-east-1 | string | "" | no | 
+| cognito_own_domain | Own domain value | string | "" | no | 
+| _API GW config_  | - | - | - | - |
+| api_version | Version of API where deployment is triggered by changing this version | number | 1 | yes | 
+| root_path | Beginning path in URL following domain. Use only if create_api_custom_domain = true | string | "" | no | 
+| api_gw_log_retention | API gateway cloud watch logs retention in days | number | 7 | no | 
+| nlb_arn | Private network load balancer arn which is needed for API GW VPC link setup | string | | yes | 
+| create_api_custom_domain | True if own domain should be used | bool | false | no | 
+| certificate_domain | Certificate domain where certificated in ACM is issued for. Use only if create_api_custom_domain = true  | string | "" | no | 
+| _Lambda config_  | - | - | - | - |
+| lambda_log_retention | ambda cloud watch log retention in days | number | 7 | no | 
 
 ### Output variables
 `tags`

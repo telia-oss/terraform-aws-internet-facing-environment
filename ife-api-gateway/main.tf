@@ -180,7 +180,7 @@ resource "aws_api_gateway_method_settings" "s" {
 resource "aws_cloudwatch_log_group" "ife_api_gw_log" {
   name              = "IFE-API-Gateway-Execution-Logs_${aws_api_gateway_rest_api.ife_rest_api.id}/${var.stage_name}"
   retention_in_days = var.api_gw_log_retetion
-
+  tags              = var.tags
 }
 
 resource "aws_api_gateway_account" "ife_api_gw_account" {
