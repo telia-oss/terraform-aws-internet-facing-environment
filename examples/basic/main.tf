@@ -1,3 +1,4 @@
+/*
 terraform {
   required_version = ">= 0.12"
 }
@@ -16,3 +17,4 @@ module "template" {
     terraform   = "True"
   }
 }
+*/
