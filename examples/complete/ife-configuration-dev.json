@@ -3,13 +3,13 @@
     {
       "scope_path": "api-path-to-expose-1",
       "resource_server": "IFE-RS-1",
-      "target": "https://some-service.example.com/endpoint-1",
+      "target": "https://some-service.example.com/endpoint-1/{proxy}",
       "enabled": true
     },
     {
       "scope_path": "api-path-to-expose-2",
       "resource_server": "IFE-RS-1",
-      "target": "https://some-service.example.com/endpoint-2",
+      "target": "https://some-service.example.com/endpoint-2/{proxy}",
       "enabled": true
     }
   ],
