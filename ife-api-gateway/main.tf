@@ -114,7 +114,7 @@ data "aws_api_gateway_resource" "ife_path_proxy_resources" {
   depends_on = [aws_api_gateway_resource.ife_path_proxy]
 }
 
-resource "aws_api_gateway_method" "any" {
+resource "aws_api_gateway_method" "any_proxy" {
   for_each = data.aws_api_gateway_resource.ife_path_proxy_resources
 
   rest_api_id   = aws_api_gateway_rest_api.ife_rest_api.id
@@ -134,7 +134,23 @@ resource "aws_api_gateway_method" "any" {
   depends_on = [aws_api_gateway_resource.ife_path_proxy]
 }
 
-resource "aws_api_gateway_integration" "ife_vpc_link_integration" {
+resource "aws_api_gateway_method" "any" {
+  for_each = data.aws_api_gateway_resource.ife_api_proxy_resources
+
+  rest_api_id   = aws_api_gateway_rest_api.ife_rest_api.id
+  resource_id   = each.value.id
+  http_method   = "ANY"
+  authorization = "CUSTOM"
+  authorizer_id = aws_api_gateway_authorizer.custom_lambda_authorizer.id
+
+  lifecycle {
+    ignore_changes = [resource_id]
+  }
+
+  depends_on = [aws_api_gateway_resource.ife_api_proxy]
+}
+
+resource "aws_api_gateway_integration" "ife_vpc_link_proxy_integration" {
   for_each = data.aws_api_gateway_resource.ife_path_proxy_resources
 
   rest_api_id             = aws_api_gateway_rest_api.ife_rest_api.id
@@ -143,7 +159,7 @@ resource "aws_api_gateway_integration" "ife_vpc_link_integration" {
   integration_http_method = "ANY"
 
   type = "HTTP_PROXY"
-  uri  = lookup(local.mapping_by_scope_path, element(split("/", each.value.path), 1), null).target
+  uri  = "${lookup(local.mapping_by_scope_path, element(split("/", each.value.path), 1), null).target}/{proxy}"
 
   connection_type = "VPC_LINK"
   connection_id   = aws_api_gateway_vpc_link.ife_vpc_link.id
@@ -151,6 +167,27 @@ resource "aws_api_gateway_integration" "ife_vpc_link_integration" {
   request_parameters = {
     "integration.request.path.proxy" = "method.request.path.proxy"
   }
+
+  lifecycle {
+    ignore_changes = [resource_id]
+  }
+
+  depends_on = [aws_api_gateway_method.any_proxy]
+}
+
+resource "aws_api_gateway_integration" "ife_vpc_link_any_integration" {
+  for_each = data.aws_api_gateway_resource.ife_api_proxy_resources
+
+  rest_api_id             = aws_api_gateway_rest_api.ife_rest_api.id
+  resource_id             = each.value.id
+  http_method             = "ANY"
+  integration_http_method = "ANY"
+
+  type = "HTTP_PROXY"
+  uri  = lookup(local.mapping_by_scope_path, each.value.path_part, null).target
+
+  connection_type = "VPC_LINK"
+  connection_id   = aws_api_gateway_vpc_link.ife_vpc_link.id
 
   lifecycle {
     ignore_changes = [resource_id]
@@ -172,7 +209,8 @@ resource "aws_api_gateway_deployment" "ife_deployment" {
     create_before_destroy = true
   }
 
-  depends_on = [aws_api_gateway_method.any, aws_api_gateway_integration.ife_vpc_link_integration]
+  depends_on = [aws_api_gateway_method.any_proxy, aws_api_gateway_method.any,
+  aws_api_gateway_integration.ife_vpc_link_proxy_integration]
 }
 
 
