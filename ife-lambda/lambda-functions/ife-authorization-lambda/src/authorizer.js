@@ -46,7 +46,16 @@ exports.handler = function (event, context) {
 
 function ValidateToken(pems, event, context) {
 
-    var token = event.authorizationToken;
+    let authorizationHeader = event.authorizationToken;
+    let token;
+
+    if (authorizationHeader.startsWith("Bearer ")) {
+        token = authorizationHeader.split(" ")[1]
+    } else {
+        console.log("Authorization header unexpected format");
+        context.fail("Unauthorized");
+    }
+
     //Fail if the token is not jwt
     var decodedJwt = jwt.decode(token, {complete: true});
     if (!decodedJwt) {
