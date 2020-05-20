@@ -16,6 +16,7 @@
   "clients": [
     {
       "name": "ife-client-1",
+      "basic_auth": false,
       "allowed_oauth_flows": [
         "client_credentials"
       ],
@@ -26,6 +27,7 @@
     },
     {
       "name": "ife-client-2",
+      "basic_auth": false,
       "allowed_oauth_flows": [
         "client_credentials"
       ],

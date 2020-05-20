@@ -60,6 +60,12 @@ variable "cognito_own_domain" {
   default     = ""
 }
 
+variable "param_store_client_prefix" {
+  description = "Prefix used in parameter store where all client basic auth configurations will be stored"
+  type        = string
+  default     = "ife"
+}
+
 #API GATEWAY
 variable "api_version" {
   description = "Version of API where deployment is triggered by changing this version"

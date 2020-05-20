@@ -46,6 +46,8 @@ resource "aws_iam_role_policy" "ife_lambda_policy" {
   policy = data.aws_iam_policy_document.ife_lambda_policy_document.json
 }
 
+data "aws_caller_identity" "current" {}
+
 data "aws_iam_policy_document" "ife_lambda_policy_document" {
   statement {
     effect = "Allow"
@@ -60,6 +62,15 @@ data "aws_iam_policy_document" "ife_lambda_policy_document" {
 
     resources = [
       "arn:aws:logs:*:*:*",
+    ]
+  }
+
+  statement {
+    effect    = "Allow"
+    resources = formatlist("arn:aws:ssm:%s:%s:parameter/%s/*", var.env_region, data.aws_caller_identity.current.account_id, var.param_store_client_prefix)
+    actions = [
+      "ssm:GetParameter",
+      "ssm:GetParameters",
     ]
   }
 }
@@ -78,8 +89,9 @@ resource "aws_lambda_function" "ife_lambda_authorizer" {
 
   environment {
     variables = {
-      REGION       = var.env_region
-      USER_POOL_ID = var.env_user_pool_id
+      REGION             = var.env_region
+      USER_POOL_ID       = var.env_user_pool_id
+      PARAM_STORE_PREFIX = var.param_store_client_prefix
     }
   }
 

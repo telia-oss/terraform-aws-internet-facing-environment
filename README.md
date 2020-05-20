@@ -37,6 +37,7 @@ Configuration JSON example:
   "mappings": [
     {
       "scope_path": "api-path-to-expose-1",
+      "basic_auth": true,
       "resource_server": "IFE-RS-1",
       "target": "https://some-service.example.com/endpoint-1",
       "enabled": true
@@ -45,6 +46,7 @@ Configuration JSON example:
   "clients": [
     {
       "name": "ife-client-1",
+      "basic_auth": true,
       "allowed_oauth_flows": [
         "client_credentials"
       ],
@@ -66,6 +68,7 @@ It its composed from 2 parts:
     
 2) clients
     * `name` client's name which will be used when new client is created
+    * `basic_auth` allows exposed API to use also with Basic authentication Authorization header. This is not recommended thou sometimes its needed.
     * `allowed_oauth_flows` currently only client_credentials supported
     * `allowed_scopes` what API on API GW level is client authorized to call. 
      It is combination of `resource_server/scope_path` values
@@ -132,7 +135,8 @@ Provider requirements:
 | create_api_custom_domain | True if own domain should be used | bool | false | no | 
 | certificate_domain | Certificate domain where certificated in ACM is issued for. Use only if create_api_custom_domain = true  | string | "" | no | 
 | _Lambda config_  | - | - | - | - |
-| lambda_log_retention | ambda cloud watch log retention in days | number | 7 | no | 
+| lambda_log_retention | lambda cloud watch log retention in days | number | 7 | no | 
+| param_store_client_prefix | Prefix used in parameter store where all client basic auth configurations will be stored | string | ife | no | 
 
 ### Output variables
 `tags`

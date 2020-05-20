@@ -20,6 +20,7 @@ locals {
   cognito_use_own_domain             = var.cognito_use_own_domain
   cognito_own_domain_certificate_arn = var.cognito_own_domain_certificate_arn
   cognito_own_domain                 = var.cognito_own_domain
+  param_store_client_prefix          = var.param_store_client_prefix
 
   #API GATEWAY
   api_version = var.api_version
@@ -34,6 +35,7 @@ locals {
 
   #LAMBDA
   lambda_log_retention = var.lambda_log_retention
+
 }
 
 module "ife_cognito" {
@@ -42,11 +44,12 @@ module "ife_cognito" {
   cognito_pool_name = local.pool_name
   ife_configuration = local.ife_configuration
 
-  custom_sub_domain = local.cognito_sub_domain
-  use_own_domain    = local.cognito_use_own_domain
-  certificate_arn   = local.cognito_own_domain_certificate_arn
-  own_domain        = local.cognito_own_domain
-  zone_domain_name  = local.certificate_domain
+  custom_sub_domain         = local.cognito_sub_domain
+  use_own_domain            = local.cognito_use_own_domain
+  certificate_arn           = local.cognito_own_domain_certificate_arn
+  own_domain                = local.cognito_own_domain
+  zone_domain_name          = local.certificate_domain
+  param_store_client_prefix = local.param_store_client_prefix
 
   tags = local.tags
 }
@@ -54,8 +57,9 @@ module "ife_cognito" {
 module "ife_authorization_lambda" {
   source = "./ife-lambda"
 
-  env_region       = local.aws_region
-  env_user_pool_id = module.ife_cognito.cognito_pool_id
+  env_region                = local.aws_region
+  env_user_pool_id          = module.ife_cognito.cognito_pool_id
+  param_store_client_prefix = local.param_store_client_prefix
 
   lambda_log_retention = local.lambda_log_retention
   tags                 = local.tags
