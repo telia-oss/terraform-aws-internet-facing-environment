@@ -16,6 +16,7 @@ IFE terraform module creates resources described in section **IFE**
     - list of clients
         - each client identified by client_id:secret
         - each client has list of OAuth scopes which determine which API is client authorized to call
+    - Optional Basic authentication support - Parameter store
         
 - Creates API Gateway 
     - VPC link

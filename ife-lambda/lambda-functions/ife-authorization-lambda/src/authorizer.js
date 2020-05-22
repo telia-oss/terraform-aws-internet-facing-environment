@@ -1,8 +1,8 @@
 console.log('Loading function');
 
-var userPoolId = process.env.USER_POOL_ID;
-var region = process.env.REGION; //e.g. us-east-1
-var iss = 'https://cognito-idp.' + region + '.amazonaws.com/' + userPoolId;
+const userPoolId = process.env.USER_POOL_ID;
+const region = process.env.REGION; //e.g. us-east-1
+const iss = 'https://cognito-idp.' + region + '.amazonaws.com/' + userPoolId;
 
 const { bearerAuth } = require('./bearerAuth.js');
 const { basicAuth } = require('./basicAuth.js');
