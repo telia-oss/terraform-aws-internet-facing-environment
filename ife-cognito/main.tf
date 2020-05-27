@@ -3,6 +3,10 @@ locals {
   resource_server_config = {
     for rs in var.ife_configuration.mappings : rs.resource_server => rs.scope_path...
   }
+
+  basic_auth_client_settings = {
+    for client in var.ife_configuration.clients : client.name => client if client.basic_auth == true
+  }
 }
 
 
@@ -83,4 +87,23 @@ resource "aws_cognito_user_pool_client" "client" {
   allowed_oauth_scopes                 = each.value.allowed_scopes
 
   depends_on = [aws_cognito_resource_server.ife_resource_server]
+}
+
+resource "random_password" "password" {
+  for_each = local.basic_auth_client_settings
+  length   = 32
+  special  = false
+  keepers = {
+    client = each.key
+  }
+}
+
+resource "aws_ssm_parameter" "basic_auth_client" {
+  for_each = local.basic_auth_client_settings
+
+  name  = "/${var.param_store_client_prefix}/client/${each.key}"
+  value = "{\"password\":${jsonencode(random_password.password[each.key].result)}, \"allowed_scopes\":\"${join(" ", each.value.allowed_scopes)}\"}"
+  type  = "SecureString"
+
+  tags = var.tags
 }
