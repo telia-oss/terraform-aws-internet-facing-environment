@@ -69,7 +69,8 @@ It its composed from 2 parts:
     
 2) clients
     * `name` client's name which will be used when new client is created
-    * `basic_auth` allows exposed API to use also with Basic authentication Authorization header. This is not recommended thou sometimes its needed.
+    * `basic_auth` allows exposed API to use also with Basic authentication Authorization header. This is not
+        recommended though sometimes its needed. Client details will be persisted in Parameter Store
     * `allowed_oauth_flows` currently only client_credentials supported
     * `allowed_scopes` what API on API GW level is client authorized to call. 
      It is combination of `resource_server/scope_path` values

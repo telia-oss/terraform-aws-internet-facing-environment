@@ -28,7 +28,7 @@ async function bearerAuth(token, iss, event) {
         }
     }
 
-    return await ValidateToken(pems, token, iss, event);
+    return await validateToken(pems, token, iss, event);
 }
 
 
@@ -51,7 +51,7 @@ const getPemFromPool = (iss) => {
     });
 }
 
-async function ValidateToken(pems, token, iss, event) {
+async function validateToken(pems, token, iss, event) {
 
     //Fail if the token is not jwt
     let decodedJwt = jwt.decode(token, { complete: true });

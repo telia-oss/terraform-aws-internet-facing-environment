@@ -91,7 +91,7 @@ resource "aws_cognito_user_pool_client" "client" {
 
 resource "random_password" "password" {
   for_each = local.basic_auth_client_settings
-  length   = 16
+  length   = 32
   special  = false
   keepers = {
     client = each.key

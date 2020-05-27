@@ -23,7 +23,7 @@ const isResourceAllowed = (resource, scopes) => {
  *   stage: "dev"
  * }
  *
- * var testPolicy = new AuthPolicy("[principal user identifier]", "[AWS account id]", apiOptions);
+ * let testPolicy = new AuthPolicy("[principal user identifier]", "[AWS account id]", apiOptions);
  * testPolicy.allowMethod(AuthPolicy.HttpVerb.GET, "/users/username");
  * testPolicy.denyMethod(AuthPolicy.HttpVerb.POST, "/pets");
  * context.succeed(testPolicy.build());
@@ -125,7 +125,7 @@ AuthPolicy.prototype = (function () {
      * @param {Object} The conditions object in the format specified by the AWS docs.
      * @return {void}
      */
-    var addMethod = function (effect, verb, resource, conditions) {
+    let addMethod = function (effect, verb, resource, conditions) {
         if (verb != "*" && !AuthPolicy.HttpVerb.hasOwnProperty(verb)) {
             throw new Error("Invalid HTTP verb " + verb + ". Allowed verbs in AuthPolicy.HttpVerb");
         }
@@ -134,11 +134,11 @@ AuthPolicy.prototype = (function () {
             throw new Error("Invalid resource path: " + resource + ". Path should match " + this.pathRegex);
         }
 
-        var cleanedResource = resource;
+        let cleanedResource = resource;
         if (resource.substring(0, 1) == "/") {
             cleanedResource = resource.substring(1, resource.length);
         }
-        var resourceArn = "arn:aws:execute-api:" +
+        let resourceArn = "arn:aws:execute-api:" +
             this.region + ":" +
             this.awsAccountId + ":" +
             this.restApiId + "/" +
@@ -168,9 +168,9 @@ AuthPolicy.prototype = (function () {
      * @return {Object} An empty statement object with the Action, Effect, and Resource
      *                  properties prepopulated.
      */
-    var getEmptyStatement = function (effect) {
+    let getEmptyStatement = function (effect) {
         effect = effect.substring(0, 1).toUpperCase() + effect.substring(1, effect.length).toLowerCase();
-        var statement = {};
+        let statement = {};
         statement.Action = "execute-api:Invoke";
         statement.Effect = effect;
         statement.Resource = [];
@@ -188,18 +188,18 @@ AuthPolicy.prototype = (function () {
      *                and the conditions for the policy
      * @return {Array} an array of formatted statements for the policy.
      */
-    var getStatementsForEffect = function (effect, methods) {
-        var statements = [];
+    let getStatementsForEffect = function (effect, methods) {
+        let statements = [];
 
         if (methods.length > 0) {
-            var statement = getEmptyStatement(effect);
+            let statement = getEmptyStatement(effect);
 
-            for (var i = 0; i < methods.length; i++) {
-                var curMethod = methods[i];
+            for (let i = 0; i < methods.length; i++) {
+                let curMethod = methods[i];
                 if (curMethod.conditions === null || curMethod.conditions.length === 0) {
                     statement.Resource.push(curMethod.resourceArn);
                 } else {
-                    var conditionalStatement = getEmptyStatement(effect);
+                    let conditionalStatement = getEmptyStatement(effect);
                     conditionalStatement.Resource.push(curMethod.resourceArn);
                     conditionalStatement.Condition = curMethod.conditions;
                     statements.push(conditionalStatement);
@@ -310,9 +310,9 @@ AuthPolicy.prototype = (function () {
                 throw new Error("No statements defined for the policy");
             }
 
-            var policy = {};
+            let policy = {};
             policy.principalId = this.principalId;
-            var doc = {};
+            let doc = {};
             doc.Version = this.version;
             doc.Statement = [];
 
