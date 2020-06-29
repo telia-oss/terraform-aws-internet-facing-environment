@@ -62,6 +62,9 @@ module "ife_authorization_lambda" {
   param_store_client_prefix = local.param_store_client_prefix
 
   lambda_log_retention = local.lambda_log_retention
+  lambda_subnet_ids = var.lambda_subnet_ids
+  lambda_security_group_ids = var.lambda_security_group_ids
+
   tags                 = local.tags
 }
 

@@ -114,3 +114,16 @@ variable "lambda_log_retention" {
   type        = number
   default     = 30
 }
+
+variable "lambda_subnet_ids" {
+  description = "VPC subnets for Lambda"
+  type        = list(string)
+  default     = []
+}
+
+variable "lambda_security_group_ids" {
+  description = "SG IDs for Lambda, should at least allow all outbound"
+  type        = list(string)
+  default     = []
+}
+
