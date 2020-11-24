@@ -279,17 +279,18 @@ EOF
 
 #DOMAIN CONFIGURATION
 resource "aws_api_gateway_base_path_mapping" "ife_base_path_mapping" {
-  count       = var.create_custom_domain == true ? 1 : 0
+  for_each = var.create_custom_domain == true ? toset(["ife_base_path_mapping"]) : toset([])
+
   api_id      = aws_api_gateway_rest_api.ife_rest_api.id
   stage_name  = aws_api_gateway_deployment.ife_deployment.stage_name
   base_path   = var.root_path
-  domain_name = aws_api_gateway_domain_name.ife_api_domain_name[count.index].domain_name
+  domain_name = aws_api_gateway_domain_name.ife_api_domain_name["ife_api_domain_name"].domain_name
 
   depends_on = [aws_api_gateway_deployment.ife_deployment]
 }
 
-data "aws_acm_certificate" "ife_cerificate" {
-  count = var.create_custom_domain == true ? 1 : 0
+data "aws_acm_certificate" "ife_certificate" {
+  for_each = var.create_custom_domain == true ? toset(["ife_cerificate"]) : toset([])
 
   domain   = "*.${var.certificate_domain}"
   statuses = ["ISSUED"]
@@ -297,9 +298,9 @@ data "aws_acm_certificate" "ife_cerificate" {
 
 
 resource "aws_api_gateway_domain_name" "ife_api_domain_name" {
-  count = var.create_custom_domain == true ? 1 : 0
+  for_each = var.create_custom_domain == true ? toset(["ife_api_domain_name"]) : toset([])
 
-  regional_certificate_arn = data.aws_acm_certificate.ife_cerificate[count.index].arn
+  regional_certificate_arn = data.aws_acm_certificate.ife_certificate["ife_cerificate"].arn
   domain_name              = "${var.custom_sub_domain}.${var.certificate_domain}"
 
   endpoint_configuration {
@@ -309,23 +310,23 @@ resource "aws_api_gateway_domain_name" "ife_api_domain_name" {
   tags = var.tags
 }
 
-data "aws_route53_zone" "this" {
-  count = var.create_custom_domain == true ? 1 : 0
+data "aws_route53_zone" "zone" {
+  for_each = var.create_custom_domain == true ? toset(["zone"]) : toset([])
 
   name = "${var.certificate_domain}."
 }
 
 resource "aws_route53_record" "record" {
-  count = var.create_custom_domain == true ? 1 : 0
+  for_each = var.create_custom_domain == true ? toset(["record"]) : toset([])
 
   name    = "${var.custom_sub_domain}.${var.certificate_domain}"
-  zone_id = data.aws_route53_zone.this[count.index].zone_id
+  zone_id = data.aws_route53_zone.zone["zone"].zone_id
   type    = "A"
 
   alias {
     evaluate_target_health = false
-    name                   = aws_api_gateway_domain_name.ife_api_domain_name[count.index].regional_domain_name
-    zone_id                = aws_api_gateway_domain_name.ife_api_domain_name[count.index].regional_zone_id
+    name                   = aws_api_gateway_domain_name.ife_api_domain_name["ife_api_domain_name"].regional_domain_name
+    zone_id                = aws_api_gateway_domain_name.ife_api_domain_name["ife_api_domain_name"].regional_zone_id
   }
 }
 
