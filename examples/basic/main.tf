@@ -1,20 +1,25 @@
-/*
 terraform {
-  required_version = ">= 0.12"
+  required_version = ">= 0.13"
 }
 
 provider "aws" {
-  version = ">= 2.27"
-  region  = var.region
+  region = var.region
 }
 
 module "template" {
   source      = "../../"
-  name_prefix = var.name_prefix
+  environment = "dev"
+  region      = "eu-west-1"
 
-  tags = {
-    environment = "dev"
-    terraform   = "True"
-  }
+  ife_configuration = jsondecode(file("./ife-configuration-dev.json"))
+
+  #COGNITO
+  pool_name          = "IFE"
+  cognito_sub_domain = "ife"
+
+  #API GATEWAY
+  api_version = 1.0
+  nlb_arn     = "arn:aws:elasticloadbalancing:eu-west-1:..."
+
 }
-*/
+
