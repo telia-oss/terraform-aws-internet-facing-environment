@@ -31,7 +31,7 @@ variable "zone_domain_name" {
 
 variable "certificate_arn" {
   description = "Arn of certificate issued for own domain"
-  type        = "string"
+  type        = string
   default     = ""
 }
 

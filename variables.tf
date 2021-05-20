@@ -37,7 +37,7 @@ variable "pool_name" {
   type        = string
 }
 
-variable cognito_sub_domain {
+variable "cognito_sub_domain" {
   description = "Cognito sub domain where clients will request tokens. Its mandatory even if own domain is not used."
   type        = string
 }
