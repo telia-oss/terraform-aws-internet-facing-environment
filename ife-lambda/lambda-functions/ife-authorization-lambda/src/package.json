@@ -7,7 +7,7 @@
   "author": "SAM CLI",
   "license": "MIT",
   "dependencies": {
-    "jsonwebtoken": "^7.0.0",
+    "jsonwebtoken": "^7.4.3",
     "jwk-to-pem": "^1.2.5",
     "request": "^2.72.0"
   },
