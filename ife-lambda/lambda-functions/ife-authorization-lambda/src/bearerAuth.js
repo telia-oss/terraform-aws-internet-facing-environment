@@ -109,9 +109,11 @@ async function validateToken(pems, token, iss, event) {
                 let policy = new AuthPolicy(principalId, awsAccountId, apiOptions);
                 if (isResourceAllowed(resource, payload.scope)) {
                     policy.allowAllMethods();
+                    console.log("Bearer auth policy allowed!");
                     resolve(policy.build());
                 } else {
                     policy.denyAllMethods();
+                    console.log("Bearer auth policy denied!");
                     resolve(policy.build());
                 }
             }

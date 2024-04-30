@@ -29,9 +29,11 @@ async function basicAuth(token, event) {
     const policy = new AuthPolicy(clientId, awsAccountId, apiOptions);
     if (isResourceAllowed(resource, clientDetails.allowed_scopes)) {
         policy.allowAllMethods();
+        console.log("Basic auth policy allowed!");
         return policy.build();
     } else {
         policy.denyAllMethods();
+        console.log("Basic auth policy denied!");
         return policy.build();
     }
 
