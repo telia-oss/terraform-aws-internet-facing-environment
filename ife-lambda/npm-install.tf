@@ -11,13 +11,12 @@ resource "null_resource" "lambda_dependencies" {
   }
 
   triggers = {
-    authUtils    = sha256(file("${local.lambda_path}/authUtils.js"))
-    authorizer   = sha256(file("${local.lambda_path}/authorizer.js"))
-    basicAuth    = sha256(file("${local.lambda_path}/basicAuth.js"))
-    bearerAuth   = sha256(file("${local.lambda_path}/bearerAuth.js"))
-    package      = sha256(file("${local.lambda_path}/package.json"))
-    lock         = sha256(file("${local.lambda_path}/package-lock.json"))
-    node_modules = sha256(join("", fileset(local.lambda_path, "node_modules/**/*.js")))
+    authUtils  = sha256(file("${local.lambda_path}/authUtils.js"))
+    authorizer = sha256(file("${local.lambda_path}/authorizer.js"))
+    basicAuth  = sha256(file("${local.lambda_path}/basicAuth.js"))
+    bearerAuth = sha256(file("${local.lambda_path}/bearerAuth.js"))
+    package    = sha256(file("${local.lambda_path}/package.json"))
+    lock       = sha256(file("${local.lambda_path}/package-lock.json"))
   }
 }
 
