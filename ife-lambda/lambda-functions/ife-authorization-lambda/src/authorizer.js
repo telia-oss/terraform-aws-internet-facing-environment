@@ -19,11 +19,9 @@ exports.handler = async (event, context) => {
             let token = authorizationHeader.split(' ')[1]
             return basicAuth(token, event);
         } else {
-            console.log("Authorization header unexpected format");
             throw "Unauthorized";
         }
     } catch (e) {
         throw e;
     }
-
 };

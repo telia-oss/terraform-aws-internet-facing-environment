@@ -1,5 +1,5 @@
-const AWS = require("aws-sdk");
-const ssm = new AWS.SSM();
+const { SSMClient, GetParameterCommand } = require('@aws-sdk/client-ssm');
+const ssmClient = new SSMClient();
 
 const { isResourceAllowed } = require('./authUtils.js');
 const { AuthPolicy } = require('./authUtils.js');
@@ -29,31 +29,28 @@ async function basicAuth(token, event) {
     const policy = new AuthPolicy(clientId, awsAccountId, apiOptions);
     if (isResourceAllowed(resource, clientDetails.allowed_scopes)) {
         policy.allowAllMethods();
+        console.log("Basic auth policy allowed!");
         return policy.build();
     } else {
         policy.denyAllMethods();
+        console.log("Basic auth policy denied!");
         return policy.build();
     }
 
-
 }
 
-const getClientFromParamStore = (clientId) => {
+const getClientFromParamStore = async (clientId) => {
     let params = {
         Name: paramStorePrefix + clientId,
         WithDecryption: true
     }
-
-    return new Promise((resolve, reject) => {
-        ssm.getParameter(params, function (err, data) {
-            if (err) {
-                console.log(err);
-                reject("Unauthorized");
-            } else {
-                resolve(data);
-            }
-        });
-    });
+    try {
+        const command = new GetParameterCommand(params);
+        return await ssmClient.send(command);
+    } catch (err) {
+        console.error(err);
+        throw "Unauthorized";
+    }
 }
 
 const checkClientPassword = (password, clientPassword) => {

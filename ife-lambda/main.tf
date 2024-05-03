@@ -82,7 +82,7 @@ resource "aws_lambda_function" "ife_lambda_authorizer" {
   memory_size   = 1024
   timeout       = 30
 
-  runtime          = "nodejs12.x"
+  runtime          = "nodejs20.x"
   role             = aws_iam_role.ife_lambda_role.arn
   source_code_hash = data.archive_file.authorization_lambda_zip.output_base64sha256
   handler          = "src/authorizer.handler"
