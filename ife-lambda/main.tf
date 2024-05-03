@@ -4,7 +4,7 @@ locals {
 
 data "archive_file" "authorization_lambda_zip" {
   type        = "zip"
-  source_dir  = "${path.module}/lambda-functions/${local.ife_authorization_lambda_name}"
+  source_dir  = data.null_data_source.wait_for_lambda_exporter.outputs["source_dir"]
   output_path = "${path.module}/lambda-functions/${local.ife_authorization_lambda_name}.zip"
 }
 
